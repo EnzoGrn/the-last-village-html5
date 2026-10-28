@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>The Last Village</title>
+<style>
+  html,body{margin:0;height:100%;background:#000;overflow:hidden}
+  body{display:flex;align-items:center;justify-content:center}
+  #stage{visibility:hidden;background:#000;image-rendering:auto;touch-action:none;user-select:none}
+  #loading{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#d9c9a0;font:16px Georgia,serif}
+  #track{width:280px;height:8px;border:1px solid #6b5a30;margin-top:14px}
+  #bar{height:100%;width:0;background:#c9a24a}
+</style>
+</head>
+<body>
+<div id="loading"><div>The Last Village</div><div id="track"><div id="bar"></div></div><div id="loadlabel" style="margin-top:8px;font-size:12px"></div></div>
+<canvas id="stage" width="800" height="600"></canvas>
+<script src="data/library.js"></script>
+<script src="data/assets.js"></script>
+<script src="data/scripts.js"></script>
+<script src="js/as.js"></script>
+<script src="js/display.js"></script>
+<script src="js/text.js"></script>
+<script src="js/render.js"></script>
+<script src="js/builtins.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
