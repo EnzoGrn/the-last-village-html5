@@ -68,9 +68,11 @@
   DP.getScope = function () { return this.$scope || (this.$scope = $.clipScope(this)); };
 
   // transform helpers
-  DP.rotationRad = function () { return Math.atan2(this.m[1], this.m[0]); };
-  DP.scaleX = function () { return Math.sqrt(this.m[0] * this.m[0] + this.m[1] * this.m[1]); };
-  DP.scaleY = function () { var s = Math.sqrt(this.m[2] * this.m[2] + this.m[3] * this.m[3]); return (this.m[0] * this.m[3] - this.m[1] * this.m[2]) < 0 ? -s : s; };
+  // As in Flash, a mirrored transform (negative determinant) is reported as a negative _xscale.
+  DP.flipped = function () { return (this.m[0] * this.m[3] - this.m[1] * this.m[2]) < 0; };
+  DP.rotationRad = function () { return this.flipped() ? Math.atan2(-this.m[1], -this.m[0]) : Math.atan2(this.m[1], this.m[0]); };
+  DP.scaleX = function () { var s = Math.sqrt(this.m[0] * this.m[0] + this.m[1] * this.m[1]); return this.flipped() ? -s : s; };
+  DP.scaleY = function () { return Math.sqrt(this.m[2] * this.m[2] + this.m[3] * this.m[3]); };
   DP.setScale = function (sx, sy, rot) {
     var c = Math.cos(rot), s = Math.sin(rot);
     this.m[0] = sx * c; this.m[1] = sx * s; this.m[2] = -sy * s; this.m[3] = sy * c;
@@ -136,7 +138,7 @@
       case '_rotation': this.scripted = true; v = num(v); if (v === v) this.setScale(this.scaleX(), this.scaleY(), v * Math.PI / 180); break;
       case '_alpha': this.scripted = true; v = num(v); if (v === v) { if (!this.cx) this.cx = [1, 1, 1, 1, 0, 0, 0, 0]; else this.cx = this.cx.slice(); this.cx[3] = v / 100; } break;
       case '_visible': this.visible = $.bool(v); break;
-      case '_width': { this.scripted = true; v = num(v); var b = this.localBounds(); if (b && v === v) { var w = b[2] - b[0]; if (w) { var sx = v / w; this.setScale(sx * (this.m[0] < 0 ? -1 : 1), this.scaleY(), this.rotationRad()); } } break; }
+      case '_width': { this.scripted = true; v = num(v); var b = this.localBounds(); if (b && v === v) { var w = b[2] - b[0]; if (w) { var sx = v / w; this.setScale(sx * (this.scaleX() < 0 ? -1 : 1), this.scaleY(), this.rotationRad()); } } break; }
       case '_height': { this.scripted = true; v = num(v); var b3 = this.localBounds(); if (b3 && v === v) { var h = b3[3] - b3[1]; if (h) this.setScale(this.scaleX(), v / h, this.rotationRad()); } break; }
       case '_name': this.rename(str(v)); break;
       default: break;

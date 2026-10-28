@@ -27,5 +27,6 @@ Open `index.html` in a recent browser (it also works from `file://`). Saves are 
 - **`gameSpeedelX` typo**: some unit movement read an undefined variable (`gameSpeedelX`) instead of `gameSpeed`, producing `NaN` positions. It now uses `gameSpeed`.
 - **Tooltips / battle camera**: fixed in the runtime (correct mouse coordinates and script timing).
 - **Tiles showing everything**: jumping backwards on a timeline recreated every instance, resetting `_visible` set by the game (flower, enemy army, buildings). Instances now persist across backward jumps as in Flash.
+- **Enemy attacks never hurt your troops**: `_xscale` of a mirrored clip was read as +100 instead of -100, so enemy arrows flew away from your units and never hit. Mirrored transforms now report a negative `_xscale`, as in Flash.
 
 All game content and branding belong to their original authors.
